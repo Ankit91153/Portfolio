@@ -7,6 +7,7 @@ import weather from "../../Assets/Projects/weather-removebg-preview.png";
 import youtube from "../../Assets/Projects/youtube-removebg-preview.png";
 import random from "../../Assets/Projects/random-removebg-preview.png";
 import netflix from "../../Assets/Projects/netflix-removebg-preview.png";
+import addnote from "../../Assets/Projects/add_note.png";
 
 function Projects() {
   return (
@@ -20,6 +21,16 @@ function Projects() {
           Here are a few projects I've worked on recently.
         </p>
         <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
+        <Col md={4} className="project-card">
+            <ProjectCard
+              imgPath={addnote}
+              isBlog={false}
+              title="AddNote"
+              description="Crafted a sleek note-taking app using MERN stack. Implemented features like user authentication and real-time updates. Demonstrated proficiency in JavaScript, React, Node.js, Express, and MongoDB."
+              ghLink="https://github.com/Ankit91153/mininotesforntend"
+              demoLink="https://mininotesapp.netlify.app/"
+            />
+          </Col>
           <Col md={4} className="project-card">
             <ProjectCard
               imgPath={youtube}

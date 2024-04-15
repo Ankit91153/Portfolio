@@ -95,7 +95,7 @@ function NavBar() {
 
             <Nav.Item>
               <Nav.Link
-                href="https://you-tube-lite.netlify.app"
+                href="https://mininotesapp.netlify.app/"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -105,7 +105,7 @@ function NavBar() {
 
             <Nav.Item className="fork-btn">
               <Button
-                href="https://github.com/Ankit91153/Portfolio"
+                href="https://github.com/Ankit91153"
                 target="_blank"
                 className="fork-btn-inner"
               >
