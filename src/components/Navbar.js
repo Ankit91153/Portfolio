@@ -95,7 +95,7 @@ function NavBar() {
 
             <Nav.Item>
               <Nav.Link
-                href="https://mininotesapp.netlify.app/"
+                href="https://studynotion-lemon.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
               >
