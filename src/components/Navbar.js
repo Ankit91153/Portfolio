@@ -101,7 +101,7 @@ function NavBar() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaBloggerss style={{ marginBottom: "2px" }} /> My Blogs
+                <FaBlogger style={{ marginBottom: "2px" }} /> My Blogs
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
