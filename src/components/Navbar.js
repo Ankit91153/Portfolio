@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { CgGitFork } from "react-icons/cg";
 import { ImBlog } from "react-icons/im";
-import { FaBlogger } from "react-icons/fa";
 
 import {
   AiFillStar,
@@ -95,15 +94,7 @@ function NavBar() {
               </Nav.Link>
             </Nav.Item>
 
-            <Nav.Item>
-              <Nav.Link
-                href="https://ankit-verse.vercel.app/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaBlogger style={{ marginBottom: "2px" }} /> My Blogs
-              </Nav.Link>
-            </Nav.Item>
+            
             <Nav.Item>
               <Nav.Link
                 href="https://ai-generator-content-rbtq.vercel.app/"
