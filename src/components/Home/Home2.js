@@ -8,6 +8,8 @@ import {
   AiFillInstagram,
 } from "react-icons/ai";
 import { FaLinkedinIn } from "react-icons/fa";
+import { INTRODUCEMYSELF } from "../../constant/home";
+import { SOCIALLINKS } from "../../constant/misc";
 
 function Home2() {
   return (
@@ -16,38 +18,45 @@ function Home2() {
         <Row>
           <Col md={8} className="home-about-description">
             <h1 style={{ fontSize: "2.6em" }}>
-              LET ME <span className="purple"> INTRODUCE </span> MYSELF
+              {INTRODUCEMYSELF.title.t1}{" "}
+              <span className="purple"> {INTRODUCEMYSELF.title.t2} </span>{" "}
+              {INTRODUCEMYSELF.title.t3}
             </h1>
             <p className="home-about-body">
-              I fell in love with programming and have learned quite a bit along the way.
+              {INTRODUCEMYSELF.description.d1} <br />
               <br />
-              <br />I am fluent in technologies like{" "}
+              {INTRODUCEMYSELF.description.d2}{" "}
               <i>
-                <b className="purple">MERN Stack, Mobile Development, and Data Structures & Algorithms.</b>
+                <b className="purple">{INTRODUCEMYSELF.description.d3}</b>
               </i>
               <br />
               <br />
-              My fields of interest include building new&nbsp;
+              {INTRODUCEMYSELF.description.d4}&nbsp;
               <i>
-                <b className="purple">Web Technologies and Products</b>
+                <b className="purple">{INTRODUCEMYSELF.description.d5}</b>
               </i>{" "}
-              and exploring areas related to{" "}
+              {INTRODUCEMYSELF.description.d6}{" "}
               <i>
-                <b className="purple">Competitive Programming.</b>
+                <b className="purple">{INTRODUCEMYSELF.description.d7}</b>
               </i>
               <br />
               <br />
-              Whenever possible, I apply my passion for developing products using{" "}
-              <b className="purple">Node.js</b> and modern JavaScript libraries like{" "}
+              {INTRODUCEMYSELF.description.d8}
+              <b className="purple">{INTRODUCEMYSELF.description.d9}</b>
+              {INTRODUCEMYSELF.description.d10}{" "}
               <i>
-                <b className="purple">React.js</b>
+                <b className="purple">{INTRODUCEMYSELF.description.d11}</b>
               </i>
-              .
             </p>
           </Col>
           <Col md={4} className="myAvtar">
             <Tilt>
-              <img src={myImg} className="img-fluid" alt="avatar" style={{ borderRadius: "50%" }} />
+              <img
+                src={myImg}
+                className="img-fluid"
+                alt="avatar"
+                style={{ borderRadius: "50%" }}
+              />
             </Tilt>
           </Col>
         </Row>
@@ -58,46 +67,20 @@ function Home2() {
               Feel free to <span className="purple">connect </span>with me
             </p>
             <ul className="home-about-social-links">
-              <li className="social-icons">
-                <a
-                  href="https://github.com/Ankit91153"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="icon-colour  home-social-icons"
-                >
-                  <AiFillGithub />
-                </a>
-              </li>
-              <li className="social-icons">
-                <a
-                  href="https://twitter.com/Ankit91153"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="icon-colour  home-social-icons"
-                >
-                  <AiOutlineTwitter />
-                </a>
-              </li>
-              <li className="social-icons">
-                <a
-                  href="https://www.linkedin.com/in/ankit-kumar-pandey-36b72220b/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="icon-colour  home-social-icons"
-                >
-                  <FaLinkedinIn />
-                </a>
-              </li>
-              <li className="social-icons">
-                <a
-                  href="https://www.instagram.com/ankitpandey3867/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="icon-colour home-social-icons"
-                >
-                  <AiFillInstagram />
-                </a>
-              </li>
+              {SOCIALLINKS.length>0 &&  SOCIALLINKS?.map(({ icon: Icon, url }) => {
+                return (
+                  <li className="social-icons">
+                    <a
+                      href="https://github.com/Ankit91153"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="icon-colour  home-social-icons"
+                    >
+                      <Icon />
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </Col>
         </Row>

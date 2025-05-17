@@ -5,24 +5,23 @@ import {
   SiPostman,
   SiVercel,
 } from "react-icons/si";
-import {AiFillWindows} from "react-icons/ai";
+import { AiFillWindows } from "react-icons/ai";
+
+const tools = [
+  AiFillWindows,
+  SiVisualstudiocode,
+  SiPostman,
+  SiVercel,
+];
 
 function Toolstack() {
   return (
     <Row style={{ justifyContent: "center", paddingBottom: "50px" }}>
-      <Col xs={4} md={2} className="tech-icons">
-        <AiFillWindows />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiVisualstudiocode />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiPostman />
-      </Col>
-    
-      <Col xs={4} md={2} className="tech-icons">
-        <SiVercel />
-      </Col>
+      {tools.map((ToolIcon, idx) => (
+        <Col xs={4} md={2} className="tech-icons" key={idx}>
+          <ToolIcon />
+        </Col>
+      ))}
     </Row>
   );
 }

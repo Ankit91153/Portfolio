@@ -11,35 +11,25 @@ import {
 import { SiFirebase } from "react-icons/si";
 import { IoLogoAndroid } from "react-icons/io";
 
+const icons = [
+  CgCPlusPlus,
+  DiJavascript1,
+  DiNodejs,
+  DiReact,
+  DiMongodb,
+  IoLogoAndroid,
+  DiGit,
+  SiFirebase,
+];
+
 function Techstack() {
   return (
     <Row style={{ justifyContent: "center", paddingBottom: "50px" }}>
-      <Col xs={4} md={2} className="tech-icons">
-        <CgCPlusPlus />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiJavascript1 />
-      </Col>
-
-      <Col xs={4} md={2} className="tech-icons">
-        <DiNodejs />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiReact />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiMongodb />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <IoLogoAndroid />
-      </Col>
-
-      <Col xs={4} md={2} className="tech-icons">
-        <DiGit />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiFirebase />
-      </Col>
+      {icons.map((IconComponent, idx) => (
+        <Col xs={4} md={2} className="tech-icons" key={idx}>
+          <IconComponent />
+        </Col>
+      ))}
     </Row>
   );
 }
