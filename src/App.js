@@ -18,15 +18,42 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  const [load, upadateLoad] = useState(true);
+  const [load, updateLoad] = useState(true);
+
+  // PWA install prompt states
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      upadateLoad(false);
+      updateLoad(false);
     }, 1200);
-
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault(); // Prevent Chrome from automatically showing prompt
+      setDeferredPrompt(e); // Save the event for later use
+      setShowInstallButton(true); // Show install button
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt(); // Show the browser install prompt
+
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log("User choice:", outcome);
+
+    setDeferredPrompt(null);
+    setShowInstallButton(false);
+  };
 
   return (
     <Router>
@@ -39,9 +66,32 @@ function App() {
           <Route path="/project" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/resume" element={<Resume />} />
-          <Route path="*" element={<Navigate to="/"/>} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
+
+        {/* Install button */}
+        {showInstallButton && (
+          <button
+            onClick={handleInstallClick}
+            style={{
+              position: "fixed",
+              bottom: "20px",
+              right: "20px",
+              padding: "10px 20px",
+              fontSize: "16px",
+              zIndex: 1000,
+              cursor: "pointer",
+              borderRadius: "5px",
+              backgroundColor: "#c770f0",
+              color: "white",
+              border: "none",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.3)"
+            }}
+          >
+            Install App
+          </button>
+        )}
       </div>
     </Router>
   );
