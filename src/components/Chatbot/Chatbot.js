@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import "./Chatbot.css";
 import { CHAT_BOT_API, TITLE } from "../../constant/chat";
-import chatbotGif from "../../Assets/chatbot.gif";
+import chatbotGif from "../../Assets/avatar.png";
 
 function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
