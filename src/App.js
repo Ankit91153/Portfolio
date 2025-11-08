@@ -61,6 +61,7 @@ function App() {
   return (
     <Router>
       <Preloader load={load} />
+      {appReady && <Chatbot />}
       <div className="App" id={load ? "no-scroll" : "scroll"}>
         <NavBar />
         <ScrollToTop />
@@ -72,7 +73,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
-        {appReady && <Chatbot />} {/* Changed this line */}
+        
 
         {showInstallButton && (
           <button
