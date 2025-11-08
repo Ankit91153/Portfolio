@@ -42,19 +42,5 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
-    <script>
-      // Ensure chatbot is visible after page load
-      window.addEventListener("load", function () {
-        setTimeout(function () {
-          const chatbotTrigger = document.querySelector(".chatbot-trigger");
-          if (chatbotTrigger) {
-            chatbotTrigger.style.display = "flex";
-            chatbotTrigger.style.visibility = "visible";
-            chatbotTrigger.style.opacity = "1";
-          }
-        }, 500);
-      });
-    </script>
   </body>
 </html>

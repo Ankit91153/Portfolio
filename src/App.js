@@ -20,7 +20,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [load, updateLoad] = useState(true);
-  const [appReady, setAppReady] = useState(false);
 
   // PWA install prompt states
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -30,16 +29,7 @@ function App() {
     const timer = setTimeout(() => {
       updateLoad(false);
     }, 1200);
-    
-    // Set app ready immediately to ensure chatbot loads
-    const readyTimer = setTimeout(() => {
-      setAppReady(true);
-    }, 100);
-    
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(readyTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -69,6 +59,7 @@ function App() {
   return (
     <Router>
       <Preloader load={load} />
+       <Chatbot />
       <div className="App" id={load ? "no-scroll" : "scroll"}>
         <NavBar />
         <ScrollToTop />
@@ -80,9 +71,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
-        
-        {/* Always render Chatbot */}
-        <Chatbot />
         
 
         {showInstallButton && (
