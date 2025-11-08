@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import "./Chatbot.css";
 import { CHAT_BOT_API, TITLE } from "../../constant/chat";
+import chatbotGif from "../../Assets/chatbot.gif";
 
 function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -118,7 +119,7 @@ function Chatbot() {
       {/* Chatbot Trigger */}
       <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
         <img
-          src={require("../../Assets/chatbot.gif")}
+          src={chatbotGif}
           alt="Chat with me"
           className="chatbot-gif"
         />

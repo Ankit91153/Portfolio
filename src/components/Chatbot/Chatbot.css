@@ -3,9 +3,11 @@
   position: fixed;
   bottom: 20px;
   left: 20px;
-  z-index: 1000;
+  z-index: 9999;
   cursor: pointer;
   transition: transform 0.3s ease;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .chatbot-trigger:hover {
@@ -18,6 +20,16 @@
   border-radius: 50%;
   box-shadow: 0 4px 15px rgba(199, 112, 240, 0.4);
   border: 2px solid #c770f0;
+}
+
+.chatbot-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #c770f0, #be50f4);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 /* Chat Modal Overlay */
@@ -50,7 +62,11 @@
   width: 90%;
   max-width: 500px;
   height: 600px;
-  background: linear-gradient(135deg, rgba(26, 11, 46, 0.95), rgba(22, 33, 62, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(26, 11, 46, 0.95),
+    rgba(22, 33, 62, 0.95)
+  );
   border-radius: 15px;
   border: 1px solid rgba(199, 112, 240, 0.3);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -216,7 +232,9 @@
 }
 
 @keyframes typing {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: scale(1);
     opacity: 0.5;
   }
@@ -278,17 +296,17 @@
     height: 80vh;
     margin: 10px;
   }
-  
+
   .chatbot-trigger {
     bottom: 15px;
     left: 15px;
   }
-  
+
   .chatbot-gif {
     width: 50px;
     height: 50px;
   }
-  
+
   .message {
     max-width: 90%;
   }
