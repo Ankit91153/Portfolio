@@ -20,6 +20,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [load, updateLoad] = useState(true);
+  const [appReady, setAppReady] = useState(false);
 
   // PWA install prompt states
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -28,15 +29,16 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       updateLoad(false);
+      setAppReady(true); // Add this line
     }, 1200);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     const handler = (e) => {
-      e.preventDefault(); // Prevent Chrome from automatically showing prompt
-      setDeferredPrompt(e); // Save the event for later use
-      setShowInstallButton(true); // Show install button
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
@@ -47,7 +49,7 @@ function App() {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    deferredPrompt.prompt(); // Show the browser install prompt
+    deferredPrompt.prompt();
 
     const { outcome } = await deferredPrompt.userChoice;
     console.log("User choice:", outcome);
@@ -70,9 +72,8 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
-        <Chatbot />
+        {appReady && <Chatbot />} {/* Changed this line */}
 
-        {/* Install button */}
         {showInstallButton && (
           <button
             onClick={handleInstallClick}
