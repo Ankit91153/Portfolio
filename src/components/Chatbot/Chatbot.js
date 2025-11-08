@@ -14,8 +14,17 @@ function Chatbot() {
     },
   ]);
   const [inputMessage, setInputMessage] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
+
+  // Ensure component is fully loaded before showing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100); // Small delay to ensure DOM is ready
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -114,14 +123,52 @@ function Chatbot() {
     };
   }, [isOpen]);
 
+  // Don't render until component is loaded
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <>
       {/* Chatbot Trigger */}
-      <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
+      <div 
+        className="chatbot-trigger" 
+        onClick={() => setIsOpen(true)}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          width: '60px',
+          height: '60px',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #c770f0, #be50f4)',
+          boxShadow: '0 4px 15px rgba(199, 112, 240, 0.4)',
+          border: '2px solid #c770f0',
+          transition: 'transform 0.3s ease'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+      >
         <img
           src={chatbotGif}
           alt="Chat with me"
-          className="chatbot-gif"
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%'
+          }}
+          onError={(e) => {
+            // Fallback to emoji if GIF fails
+            e.target.style.display = 'none';
+            e.target.parentElement.innerHTML = '💬';
+            e.target.parentElement.style.fontSize = '24px';
+            e.target.parentElement.style.color = 'white';
+          }}
         />
       </div>
 

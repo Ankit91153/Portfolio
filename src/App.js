@@ -29,9 +29,17 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       updateLoad(false);
-      setAppReady(true); // Add this line
     }, 1200);
-    return () => clearTimeout(timer);
+    
+    // Set app ready immediately to ensure chatbot loads
+    const readyTimer = setTimeout(() => {
+      setAppReady(true);
+    }, 100);
+    
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(readyTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -61,7 +69,6 @@ function App() {
   return (
     <Router>
       <Preloader load={load} />
-      {appReady && <Chatbot />}
       <div className="App" id={load ? "no-scroll" : "scroll"}>
         <NavBar />
         <ScrollToTop />
@@ -73,6 +80,9 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
+        
+        {/* Always render Chatbot */}
+        <Chatbot />
         
 
         {showInstallButton && (
