@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundary";
 import reportWebVitals from "./reportWebVitals";
-// import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+// import * as serviceWorkerRegistration from "./serviceWorkegistration";
 
 ReactDOM.render(
   <React.StrictMode>

@@ -7,6 +7,7 @@ import Projects from "./components/Projects/Projects";
 import Footer from "./components/Footer";
 import Resume from "./components/Resume/ResumeNew";
 import Chatbot from "./components/Chatbot/Chatbot";
+import ChatbotWelcomePopup from "./components/ChatbotWelcomePopup/ChatbotWelcomePopup";
 import {
   BrowserRouter as Router,
   Route,
@@ -59,7 +60,8 @@ function App() {
   return (
     <Router>
       <Preloader load={load} />
-       <Chatbot />
+      <Chatbot />
+      <ChatbotWelcomePopup />
       <div className="App" id={load ? "no-scroll" : "scroll"}>
         <NavBar />
         <ScrollToTop />

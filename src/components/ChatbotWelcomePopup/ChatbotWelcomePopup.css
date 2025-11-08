@@ -1,0 +1,265 @@
+/* Chatbot Welcome Popup Styles */
+.chatbot-welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeInOverlay 0.4s ease;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chatbot-welcome-popup {
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 11, 46, 0.98),
+    rgba(22, 33, 62, 0.98)
+  );
+  border-radius: 20px;
+  border: 2px solid rgba(199, 112, 240, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  animation: slideInPopup 0.5s ease;
+}
+
+@keyframes slideInPopup {
+  from {
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.popup-header {
+  background: linear-gradient(135deg, #c770f0, #be50f4);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.popup-content {
+  padding: 25px;
+  color: white;
+  text-align: center;
+}
+
+.chatbot-icon {
+  font-size: 3em;
+  margin-bottom: 15px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.welcome-message {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.issue-notice {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.notice-text {
+  margin: 0;
+  font-size: 0.95em;
+  color: #ffc107;
+  line-height: 1.5;
+}
+
+.shortcuts-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.shortcuts-section h4 {
+  margin: 0 0 15px 0;
+  color: #c770f0;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px 0;
+}
+
+.shortcut-key {
+  background: rgba(199, 112, 240, 0.2);
+  color: #c770f0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+  font-size: 0.9em;
+  border: 1px solid rgba(199, 112, 240, 0.3);
+}
+
+.shortcut-desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9em;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 15px;
+  margin: 25px 0 15px 0;
+  flex-wrap: wrap;
+}
+
+.refresh-btn,
+.continue-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95em;
+}
+
+.refresh-btn {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.refresh-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+.continue-btn {
+  background: linear-gradient(135deg, #c770f0, #be50f4);
+  color: white;
+}
+
+.continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(199, 112, 240, 0.4);
+}
+
+.footer-text {
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 15px 0 0 0;
+  font-style: italic;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .chatbot-welcome-popup {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .popup-header {
+    padding: 15px;
+  }
+
+  .popup-header h3 {
+    font-size: 1.2em;
+  }
+
+  .popup-content {
+    padding: 20px;
+  }
+
+  .shortcuts-section {
+    padding: 15px;
+  }
+
+  .popup-actions {
+    flex-direction: column;
+  }
+
+  .refresh-btn,
+  .continue-btn {
+    min-width: auto;
+  }
+
+  .shortcut-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .shortcut-key {
+    align-self: center;
+  }
+}
