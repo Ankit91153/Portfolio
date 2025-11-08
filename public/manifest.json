@@ -3,13 +3,13 @@
   "name": "Ankit Kumar Pandey",
   "icons": [
     {
-      "src": "logo192.png",
-      "sizes": "192x192",
+      "src": "logo152.png",
+      "sizes": "152x152",
       "type": "image/png"
     },
     {
-      "src": "logo512.png",
-      "sizes": "512x512",
+      "src": "logo192.png",
+      "sizes": "192x192",
       "type": "image/png"
     }
   ],
