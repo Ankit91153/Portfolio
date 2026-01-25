@@ -87,6 +87,8 @@ button:focus {
   transition: all 0.3s ease-out 0s !important;
   padding: 0.3rem 2rem !important;
   font-size: 1.2rem !important;
+  width: 100% !important;
+  z-index: 1000 !important;
 }
 
 .navbar-toggler {

@@ -66,7 +66,7 @@ function Home2() {
                 return (
                   <li className="social-icons">
                     <a
-                      href="https://github.com/Ankit91153"
+                      href={url}
                       target="_blank"
                       rel="noreferrer"
                       className="icon-colour  home-social-icons"

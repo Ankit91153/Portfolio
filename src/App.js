@@ -8,6 +8,8 @@ import Footer from "./components/Footer";
 import Resume from "./components/Resume/ResumeNew";
 import Chatbot from "./components/Chatbot/Chatbot";
 import ChatbotWelcomePopup from "./components/ChatbotWelcomePopup/ChatbotWelcomePopup";
+import { Batch } from "./components/Batch";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -21,10 +23,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [load, updateLoad] = useState(true);
-
-  // PWA install prompt states
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
+  const [batchVisible, setBatchVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,28 +32,8 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstallButton(true);
-    };
-
-    window.addEventListener("beforeinstallprompt", handler);
-
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log("User choice:", outcome);
-
-    setDeferredPrompt(null);
-    setShowInstallButton(false);
+  const handleBatchVisibility = (isVisible) => {
+    setBatchVisible(isVisible);
   };
 
   return (
@@ -62,8 +41,20 @@ function App() {
       <Preloader load={load} />
       <Chatbot />
       <ChatbotWelcomePopup />
-      <div className="App" id={load ? "no-scroll" : "scroll"}>
-        <NavBar />
+      
+      {/* Batch component at the very top - FIXED */}
+      <Batch onVisibilityChange={handleBatchVisibility} />
+     
+      <div 
+        className="App" 
+        id={load ? "no-scroll" : "scroll"}
+        style={{ 
+          // Account for both fixed elements
+          transition: "padding-top 0.3s ease"
+        }}
+      >
+        {/* NavBar is also FIXED */}
+        <NavBar batchVisible={batchVisible} />
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -73,29 +64,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
-        
-
-        {showInstallButton && (
-          <button
-            onClick={handleInstallClick}
-            style={{
-              position: "fixed",
-              bottom: "20px",
-              right: "20px",
-              padding: "10px 20px",
-              fontSize: "16px",
-              zIndex: 1000,
-              cursor: "pointer",
-              borderRadius: "5px",
-              backgroundColor: "#c770f0",
-              color: "white",
-              border: "none",
-              boxShadow: "0 2px 5px rgba(0,0,0,0.3)"
-            }}
-          >
-            Install App
-          </button>
-        )}
       </div>
     </Router>
   );

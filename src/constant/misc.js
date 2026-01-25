@@ -1,4 +1,6 @@
-import { AiFillGithub, AiOutlineTwitter, AiFillInstagram } from "react-icons/ai";
+import { AiFillGithub, AiOutlineTwitter } from "react-icons/ai";
+import { SiLeetcode } from "react-icons/si";
+
 import { FaLinkedinIn } from "react-icons/fa";
 
 export const SOCIALLINKS = [
@@ -15,7 +17,7 @@ export const SOCIALLINKS = [
     url: "https://www.linkedin.com/in/ankit-kumar-pandey-36b72220b/",
   },
   {
-    icon: AiFillInstagram,
-    url: "https://www.instagram.com/ankitpandey3867/",
+    icon: SiLeetcode,
+    url: "https://leetcode.com/u/Pandey0420/",
   },
 ];

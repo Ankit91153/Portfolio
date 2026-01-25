@@ -16,7 +16,8 @@ import {
 
 import { CgFileDocument } from "react-icons/cg";
 
-function NavBar() {
+
+function NavBar({ batchVisible }) {
   const [expand, updateExpanded] = useState(false);
   const [navColour, updateNavbar] = useState(false);
 
@@ -36,7 +37,15 @@ function NavBar() {
       fixed="top"
       expand="md"
       className={navColour ? "sticky" : "navbar"}
+      style={{
+        position: "fixed",
+        top: batchVisible ? "50px" : "0",
+        width: "100%",
+        zIndex: 1000,
+        transition: "top 0.3s ease"
+      }}
     >
+     
       <Container>
         <Navbar.Brand to="/" className="d-flex">
           <Nav.Link as={Link} to="/">
@@ -118,6 +127,7 @@ function NavBar() {
           </Nav>
         </Navbar.Collapse>
       </Container>
+     
     </Navbar>
   );
 }

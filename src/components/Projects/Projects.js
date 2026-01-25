@@ -2,21 +2,27 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import ProjectCard from "./ProjectCards";
 import Particle from "../Particle";
-import { DESCRIPTION, PROJECTS, TITLE1, TITLE2 } from "../../constant/project";
-import Button from "react-bootstrap/Button";
-
-const LIMIT = 3;
+import { DESCRIPTION, PROJECTS, TITLE1, TITLE2, CATEGORIES } from "../../constant/project";
+import "./Projects.css";
 
 function Projects() {
-  const [visibleCount, setVisibleCount] = useState(LIMIT);
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  const handleLoadMore = () => {
-    console.log("HELLL");
-    setVisibleCount((prev) => prev + LIMIT);
+  // Filter projects based on selected category
+  const filteredProjects = activeCategory === "All" 
+    ? PROJECTS 
+    : PROJECTS.filter(project => {
+        // Handle both single category (string) and multiple categories (array)
+        if (Array.isArray(project.category)) {
+          return project.category.includes(activeCategory);
+        } else {
+          return project.category === activeCategory;
+        }
+      });
+
+  const handleCategoryChange = (category) => {
+    setActiveCategory(category);
   };
-
-  const visibleProjects = [...PROJECTS].reverse().slice(0, visibleCount);
-  const hasMore = visibleCount < PROJECTS.length;
 
   return (
     <Container fluid className="project-section">
@@ -28,32 +34,51 @@ function Projects() {
         <p style={{ color: "white" }}>
           {DESCRIPTION}
         </p>
-        <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
-          {visibleProjects.map((project, index) => (
-            <Col md={4} className="project-card" key={index}>
-              <ProjectCard
-                imgPath={project.imgPath}
-                isBlog={false}
-                title={project.title}
-                description={project.description}
-                ghLink={project.ghLink}
-                demoLink={project.demoLink}
-              />
-            </Col>
-          ))}
-        </Row>
-      </Container>
-      <Container>
-        {hasMore && (
-          <Row style={{ justifyContent: "center", position: "relative" }}>
-            <Button
-              variant="primary"
-              onClick={handleLoadMore}
-              style={{ maxWidth: "250px" }}
-            >
-              Load More
-            </Button>
+
+        {/* Category Tabs */}
+        <div className="category-tabs-container">
+          <div className="category-tabs">
+            {CATEGORIES.map((category) => (
+              <button
+                key={category}
+                className={`category-tab ${activeCategory === category ? 'active' : ''}`}
+                onClick={() => handleCategoryChange(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="projects-grid" key={activeCategory}>
+          <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
+            {filteredProjects.map((project, index) => (
+              <Col md={4} className="project-card" key={project.id}>
+                <div 
+                  className="project-card-wrapper"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <ProjectCard
+                    imgPath={project.imgPath}
+                    isBlog={false}
+                    title={project.title}
+                    description={project.description}
+                    ghLink={project.ghLink}
+                    demoLink={project.demoLink}
+                    aboutLink={project.aboutLink}
+                  />
+                </div>
+              </Col>
+            ))}
           </Row>
+        </div>
+
+        {filteredProjects.length === 0 && (
+          <div style={{ textAlign: "center", color: "white", padding: "50px 0" }}>
+            <h4>No projects found in this category</h4>
+            <p>Try selecting a different category</p>
+          </div>
         )}
       </Container>
     </Container>

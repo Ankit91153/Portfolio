@@ -5,28 +5,31 @@ function ChatbotWelcomePopup() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    // Only show in production mode
-    if (process.env.NODE_ENV !== 'production') {
-      return;
-    }
-
-    // Check if user has visited before
-    const hasVisited = localStorage.getItem('portfolio-chatbot-welcome-shown');
+    // Check if popup has been shown before
+    const hasShownPopup = localStorage.getItem('portfolio-refresh-popup-shown');
     
-    if (!hasVisited) {
-      // Show popup after a short delay to ensure page is loaded
-      const timer = setTimeout(() => {
-        setShowPopup(true);
-      }, 2000);
-
-      return () => clearTimeout(timer);
+    if (hasShownPopup) {
+      return; // Don't show again if already shown
     }
+
+    // Wait 5 seconds then check if chatbot is visible
+    const timer = setTimeout(() => {
+      const chatbotTrigger = document.querySelector('.chatbot-trigger');
+      
+      // If chatbot trigger is not found or not visible, show the popup
+      if (!chatbotTrigger || chatbotTrigger.style.display === 'none' || 
+          window.getComputedStyle(chatbotTrigger).display === 'none') {
+        setShowPopup(true);
+      }
+    }, 5000); // 5 seconds delay
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleClose = () => {
     setShowPopup(false);
     // Mark as shown so it doesn't appear again
-    localStorage.setItem('portfolio-chatbot-welcome-shown', 'true');
+    localStorage.setItem('portfolio-refresh-popup-shown', 'true');
   };
 
   const handleRefresh = () => {
@@ -72,21 +75,21 @@ function ChatbotWelcomePopup() {
     <div className="chatbot-welcome-overlay">
       <div className="chatbot-welcome-popup">
         <div className="popup-header">
-          <h3>👋 Welcome to My Portfolio!</h3>
+          <h3>🤖 Chatbot Not Loading?</h3>
           <button className="close-btn" onClick={handleClose}>×</button>
         </div>
         
         <div className="popup-content">
-          <div className="chatbot-icon">🤖</div>
+          <div className="chatbot-icon">⚠️</div>
           
           <p className="welcome-message">
-            Hi there! I'm excited you're here. I've built an AI chatbot to help you learn about my projects, skills, and experience.
+            It looks like the AI chatbot didn't load properly. This sometimes happens on the first visit.
           </p>
           
           <div className="issue-notice">
             <p className="notice-text">
-              <strong>Quick Note:</strong> If you don't see the chat icon in the bottom-left corner, 
-              please try a hard refresh to ensure all features load properly.
+              <strong>Quick Fix:</strong> A hard refresh will ensure all features load correctly, 
+              including the interactive chatbot in the bottom-left corner.
             </p>
           </div>
 
@@ -107,12 +110,12 @@ function ChatbotWelcomePopup() {
               🔄 Refresh Now
             </button>
             <button className="continue-btn" onClick={handleClose}>
-              Continue Exploring
+              Continue Without Chatbot
             </button>
           </div>
 
           <p className="footer-text">
-            This message will only appear once. Enjoy exploring my work! 🚀
+            This message will only appear once per session. 🚀
           </p>
         </div>
       </div>

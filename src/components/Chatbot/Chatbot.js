@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import "./Chatbot.css";
 import { CHAT_BOT_API, TITLE } from "../../constant/chat";
@@ -6,10 +6,16 @@ import chatbotGif from "../../Assets/chatbot.gif";
 
 function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [messages, setMessages] = useState([
     {
       type: "bot",
       text: "Hi! I'm **Ankit's AI assistant**. I can help you learn about his projects, skills, experience, and more. What would you like to know?",
+      timestamp: new Date(),
+    },
+    {
+      type: "bot",
+      text: "⚠️ Note: The backend is hosted on a free server, so the first API response may take a little longer. Thank you for your patience.",
       timestamp: new Date(),
     },
   ]);
@@ -27,7 +33,9 @@ function Chatbot() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (inputMessage.trim() === "") return;
+    if (inputMessage.trim() === "" || isProcessing) return;
+
+    setIsProcessing(true);
 
     // Add user message
     const userMessage = {
@@ -37,6 +45,10 @@ function Chatbot() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+
+    // Clear input immediately
+    const currentMessage = inputMessage;
+    setInputMessage("");
 
     // Add typing indicator
     const typingMessage = {
@@ -56,7 +68,7 @@ function Chatbot() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          question: inputMessage,
+          question: currentMessage,
         }),
       });
 
@@ -88,123 +100,127 @@ function Chatbot() {
         };
         return [...withoutTyping, errorMessage];
       });
-    }
-
-    setInputMessage("");
-  };
-
-  const handleClickOutside = (e) => {
-    if (
-      chatContainerRef.current &&
-      !chatContainerRef.current.contains(e.target)
-    ) {
-      setIsOpen(false);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>
-      {/* Chatbot Trigger */}
-      <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
-        <img
-          src={chatbotGif}
-          alt="Chat with me"
-          className="chatbot-gif"
-        />
-      </div>
-
-      {/* Chat Modal */}
-      {isOpen && (
-        <div className="chatbot-overlay">
-          <div className="chatbot-container" ref={chatContainerRef}>
-            <div className="chatbot-header">
-              <h5>{TITLE}</h5>
-              <button className="close-btn" onClick={() => setIsOpen(false)}>
-                ×
-              </button>
+      {/* Chatbot Widget Container */}
+      <div className="chatbot-widget">
+        {/* Chat Window */}
+        <div className={`chat-window ${isOpen ? 'open' : 'closed'}`}>
+          <div className="chat-header">
+            <div className="chat-header-info">
+              <div className="bot-avatar">
+                <img src={chatbotGif} alt="AI Assistant" />
+              </div>
+              <div className="bot-info">
+                <h4>{TITLE}</h4>
+                <span className="status">Online</span>
+              </div>
             </div>
+            <button className="minimize-btn" onClick={toggleChat}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
 
-            <div className="chatbot-messages">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`message ${
-                    message.type === "user" ? "user-message" : "bot-message"
-                  } ${message.isTyping ? "typing-message" : ""}`}
-                >
-                  <div className="message-content">
-                    {message.isTyping ? (
-                      <div className="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-                    ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: message.text.replace(
-                            /\*\*(.*?)\*\*/g,
-                            "<strong>$1</strong>"
-                          ),
-                        }}
-                      />
-                    )}
+          <div className="chat-messages">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`message ${message.type === "user" ? "user-message" : "bot-message"} ${message.isTyping ? "typing-message" : ""}`}
+              >
+                {message.type === "bot" && !message.isTyping && (
+                  <div className="message-avatar">
+                    <img src={chatbotGif} alt="Bot" />
                   </div>
+                )}
+                <div className="message-content">
+                  {message.isTyping ? (
+                    <div className="typing-indicator">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  ) : (
+                    <div
+                      className="message-text"
+                      dangerouslySetInnerHTML={{
+                        __html: message.text.replace(
+                          /\*\*(.*?)\*\*/g,
+                          "<strong>$1</strong>"
+                        ),
+                      }}
+                    />
+                  )}
                   {!message.isTyping && (
                     <div className="message-time">
                       {message.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
-                      {message.metadata && (
-                        <span className="message-metadata">
-                          • {message.metadata.relevance} relevance
-                        </span>
-                      )}
                     </div>
                   )}
                 </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            <Form onSubmit={handleSendMessage} className="chatbot-input-form">
-              <Row className="align-items-center">
-                <Col xs={9}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Type your message..."
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    className="message-input"
-                  />
-                </Col>
-                <Col xs={3}>
-                  <Button
-                    type="submit"
-                    className="send-btn"
-                    disabled={inputMessage.trim() === ""}
-                  >
-                    Send
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
+
+          <Form onSubmit={handleSendMessage} className="chat-input-form">
+            <div className="input-container">
+              <input
+                type="text"
+                placeholder="Type your message..."
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                className="message-input"
+                disabled={isProcessing}
+              />
+              <button
+                type="submit"
+                className="send-button"
+                disabled={inputMessage.trim() === "" || isProcessing}
+              >
+                {isProcessing ? (
+                  <div className="loading-spinner"></div>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </button>
+            </div>
+          </Form>
         </div>
-      )}
+
+        {/* Chat Trigger Button */}
+        <button className="chat-trigger" onClick={toggleChat}>
+          <div className={`trigger-content ${isOpen ? 'hidden' : 'visible'}`}>
+            <img src={chatbotGif} alt="Chat with me" />
+          </div>
+          <div className={`close-icon ${isOpen ? 'visible' : 'hidden'}`}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </button>
+
+        {/* Notification Badge */}
+        {!isOpen && (
+          <div className="notification-badge">
+            <span>1</span>
+          </div>
+        )}
+      </div>
     </>
   );
 }
