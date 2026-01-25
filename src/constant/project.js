@@ -15,7 +15,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/QRGenerator",
     demoLink: "https://qr-generator-ten-delta.vercel.app/",
     category: ["PWA", "Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/qr-generator",
   },
   {
     imgPath:
@@ -27,7 +26,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/image-manager-frontend",
     demoLink: "https://image-manager-frontend-eight.vercel.app",
     category: [ "Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/image-manager",
   },
   {
     imgPath:
@@ -39,7 +37,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/portfolio-chatbot-widget#readme",
     demoLink: "https://www.npmjs.com/package/portfolio-chatbot-widget",
     category: ["NPM Package"],
-    aboutLink: "https://www.npmjs.com/package/portfolio-chatbot-widget",
   },
   {
     imgPath:
@@ -51,7 +48,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/portfolio-chatbot",
     demoLink: "https://portfolio-chatbot-omega-one.vercel.app/",
     category: ["Website", "AI"],
-    aboutLink: "https://www.npmjs.com/package/portfolio-chatbot-widget",
   },
   {
     imgPath:
@@ -63,7 +59,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/blog-frontend",
     demoLink: "https://ankit-verse.vercel.app/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/ankitverse-platform",
   },
   {
     imgPath:
@@ -75,7 +70,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/ai-generator-content",
     demoLink: "https://ai-generator-content-rbtq.vercel.app/",
     category: ["PWA", "Website", "AI"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/ai-content-generator",
   },
   {
     imgPath:
@@ -87,7 +81,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/studynotion",
     demoLink: "https://studynotion-lemon.vercel.app/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/studynotion",
   },
   {
     imgPath:
@@ -99,7 +92,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/mininotesforntend",
     demoLink: "https://mininotesapp.netlify.app/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/notes-app",
   },
   {
     imgPath:
@@ -111,7 +103,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/youTube-Lite",
     demoLink: "https://you-tube-lite.netlify.app",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/youtube-clone",
   },
   {
     imgPath:
@@ -123,7 +114,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/netflixClone",
     demoLink: "https://ankit91153.github.io/netflixClone/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/netflix-clone",
   },
   {
     imgPath:
@@ -135,7 +125,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/weatherApp",
     demoLink: "https://weather-app-by-ankit.onrender.com/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/weather-app",
   },
   {
     imgPath:
@@ -147,7 +136,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/e-commerce-website",
     demoLink: "https://e-commerce-website-react-nine.vercel.app/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/ecommerce-cart",
   },
   {
     imgPath:
@@ -159,7 +147,6 @@ const RAW_PROJECTS = [
     ghLink: "https://github.com/Ankit91153/Number-Guesses-Game",
     demoLink: "https://ankit91153.github.io/Number-Guesses-Game/",
     category: ["Website"],
-    aboutLink: "https://ankit-verse.vercel.app/blog/guess-number-game",
   },
 ];
 
