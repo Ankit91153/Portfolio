@@ -21,12 +21,19 @@ function VoiceAgent() {
   const [volumeLevel, setVolumeLevel] = useState(0);
   const transcriptEndRef = useRef(null);
   const [hasBadKey, setHasBadKey] = useState(false);
+  const [showNotice, setShowNotice] = useState(true);
 
   useEffect(() => {
     if (!VAPI_PUBLIC_KEY || !VAPI_ASSISTANT_ID) {
       setHasBadKey(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (!hasBadKey) return;
+    const timer = setTimeout(() => setShowNotice(false), 6000);
+    return () => clearTimeout(timer);
+  }, [hasBadKey]);
 
   useEffect(() => {
     transcriptEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -195,16 +202,18 @@ function VoiceAgent() {
           </div>
 
           <div className="va-transcript">
-            {hasBadKey && (
-              <div className="va-key-warning">
-                <span>⚠️</span>
-                <div>
-                  <strong>VAPI credentials not set.</strong>
-                  <br />
-                  Add <code>REACT_APP_VAPI_PUBLIC_KEY</code> and{" "}
-                  <code>REACT_APP_VAPI_ASSISTANT_ID</code> to your{" "}
-                  <code>.env</code> file.
+            {hasBadKey && showNotice && (
+              <div className="va-server-notice">
+                <div className="va-server-notice__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor"/>
+                  </svg>
                 </div>
+                <div className="va-server-notice__body">
+                  <span className="va-server-notice__title">Voice Agent Temporarily Unavailable</span>
+                  <span className="va-server-notice__msg">We're experiencing a server issue — it'll be fixed as soon as possible. Meanwhile, feel free to use the <strong>Chatbot</strong> at the bottom corner. Thank you for your patience! 🙏</span>
+                </div>
+                <button className="va-server-notice__close" onClick={() => setShowNotice(false)}>×</button>
               </div>
             )}
 

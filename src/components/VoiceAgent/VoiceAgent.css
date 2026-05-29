@@ -270,27 +270,76 @@
 }
 
 /* ── Key warning ── */
-.va-key-warning {
+.va-server-notice {
   display: flex;
-  gap: 10px;
   align-items: flex-start;
-  background: rgba(240, 140, 0, 0.12);
-  border: 1px solid rgba(240, 140, 0, 0.3);
-  border-radius: 10px;
-  padding: 10px 12px;
-  color: rgba(255, 220, 100, 0.9);
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(199, 112, 240, 0.12) 0%, rgba(100, 50, 180, 0.08) 100%);
+  border: 1px solid rgba(199, 112, 240, 0.3);
+  border-radius: 12px;
+  padding: 12px 12px 12px 14px;
+  animation: va-notice-in 0.4s ease both, va-notice-out 0.5s ease 5.5s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.va-server-notice::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #c770f0, #6420a0);
+  animation: va-notice-timer 6s linear both;
+  border-radius: 0 0 12px 12px;
+}
+
+.va-server-notice__icon {
+  color: #c770f0;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.va-server-notice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.va-server-notice__title {
   font-size: 12px;
+  font-weight: 700;
+  color: #c770f0;
+  letter-spacing: 0.3px;
+}
+
+.va-server-notice__msg {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
   line-height: 1.5;
 }
 
-.va-key-warning span { font-size: 18px; flex-shrink: 0; }
-.va-key-warning code {
-  background: rgba(255,255,255,0.1);
-  padding: 1px 4px;
-  border-radius: 4px;
-  font-size: 11px;
+.va-server-notice__msg strong {
+  color: rgba(255, 255, 255, 0.95);
 }
-.va-key-warning a { color: #c770f0; }
+
+.va-server-notice__close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.va-server-notice__close:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
 
 /* ── Messages ── */
 .va-msg {
@@ -482,6 +531,21 @@
 @keyframes va-typing-dot {
   0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
   40%            { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes va-notice-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes va-notice-out {
+  from { opacity: 1; transform: translateY(0); max-height: 200px; }
+  to   { opacity: 0; transform: translateY(-6px); max-height: 0; padding: 0; margin: 0; }
+}
+
+@keyframes va-notice-timer {
+  from { width: 100%; }
+  to   { width: 0%; }
 }
 
 @keyframes va-msg-in {
