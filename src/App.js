@@ -7,7 +7,7 @@ import Projects from "./components/Projects/Projects";
 import Footer from "./components/Footer";
 import Resume from "./components/Resume/ResumeNew";
 import Chatbot from "./components/Chatbot/Chatbot";
-import ChatbotWelcomePopup from "./components/ChatbotWelcomePopup/ChatbotWelcomePopup";
+import VoiceAgent from "./components/VoiceAgent/VoiceAgent";
 import { Batch } from "./components/Batch";
 
 import {
@@ -40,7 +40,7 @@ function App() {
     <Router>
       <Preloader load={load} />
       <Chatbot />
-      <ChatbotWelcomePopup />
+      <VoiceAgent />
       
       {/* Batch component at the very top - FIXED */}
       <Batch onVisibilityChange={handleBatchVisibility} />
