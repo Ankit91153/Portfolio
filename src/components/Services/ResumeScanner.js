@@ -201,18 +201,24 @@ export default function ResumeScanner() {
 
       // 2. Try direct client-side Groq API call if groqApiKey is present in .env
       if (groqApiKey && groqApiKey.trim()) {
-        const clientAiResult = await extractWithGroq(groqApiKey.trim(), {
-          file: targetFile,
-          rawText: rawPdfText,
-          mimeType: targetFile.type,
-        });
+        try {
+          setProgressMsg("Extracting details with Groq AI...");
+          const clientAiResult = await extractWithGroq(groqApiKey.trim(), {
+            file: targetFile,
+            rawText: rawPdfText,
+            mimeType: targetFile.type,
+          });
 
-        if (clientAiResult) {
-          updateData(clientAiResult);
-          setProgressVal(1.0);
-          setProgressMsg("Extracted successfully with Groq AI!");
-          setIsProcessing(false);
-          return;
+          if (clientAiResult) {
+            updateData(clientAiResult);
+            setProgressVal(1.0);
+            setProgressMsg("Extracted successfully with Groq AI!");
+            setIsProcessing(false);
+            return;
+          }
+        } catch (aiErr) {
+          console.warn("Groq AI extraction failed, falling back to local engine:", aiErr);
+          setProgressMsg("AI parsing unavailable, using local extraction...");
         }
       }
 

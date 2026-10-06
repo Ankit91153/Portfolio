@@ -453,67 +453,88 @@ export async function extractWithGrok(apiKey, { file, rawText, mimeType }) {
 }
 
 /**
- * Extraction using Groq API (Free tier: Llama 3.2 Vision & Llama 3.3 70B)
+ * Extraction using Groq API (High-speed free tier: qwen/qwen3.8-27b & openai/gpt-oss-120b)
  */
 export async function extractWithGroq(apiKey, { file, rawText, mimeType }) {
   const endpoint = "https://api.groq.com/openai/v1/chat/completions";
-  let messages = [];
-  let model = "llama-3.3-70b-versatile";
+  const isImage = file && (file.type?.startsWith("image/") || mimeType?.startsWith("image/"));
+  
+  const candidateModels = isImage
+    ? ["qwen/qwen3.8-27b"]
+    : ["qwen/qwen3.8-27b", "openai/gpt-oss-120b", "openai/gpt-oss-20b"];
 
-  if (file && (file.type?.startsWith("image/") || mimeType?.startsWith("image/"))) {
-    model = "llama-3.2-11b-vision-preview";
-    const base64Data = await fileToBase64(file);
-    messages = [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: RESUME_SCHEMA_PROMPT },
+  let lastError = null;
+
+  for (const model of candidateModels) {
+    try {
+      let messages = [];
+      if (isImage) {
+        const base64Data = await fileToBase64(file);
+        messages = [
           {
-            type: "image_url",
-            image_url: {
-              url: base64Data,
-            },
+            role: "user",
+            content: [
+              { type: "text", text: RESUME_SCHEMA_PROMPT },
+              {
+                type: "image_url",
+                image_url: {
+                  url: base64Data,
+                },
+              },
+            ],
           },
-        ],
-      },
-    ];
-  } else {
-    messages = [
-      {
-        role: "system",
-        content: RESUME_SCHEMA_PROMPT,
-      },
-      {
-        role: "user",
-        content: `Resume text:\n\n${rawText || "Please parse the candidate information."}`,
-      },
-    ];
+        ];
+      } else {
+        messages = [
+          {
+            role: "system",
+            content: RESUME_SCHEMA_PROMPT,
+          },
+          {
+            role: "user",
+            content: `Resume text:\n\n${rawText || "Please parse the candidate information."}`,
+          },
+        ];
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: 0.1,
+          response_format: { type: "json_object" },
+        }),
+      });
+
+      if (!response.ok) {
+        const errObj = await response.json().catch(() => ({}));
+        const msg = errObj.error?.message || response.statusText;
+        lastError = new Error(`Groq (${model}): ${msg}`);
+        // If model not found (404), try next model
+        if (response.status === 404 || msg.includes("does not exist")) {
+          continue;
+        }
+        throw lastError;
+      }
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content;
+      if (!content) {
+        throw new Error("Empty response from Groq API");
+      }
+
+      return cleanAndParseJson(content);
+    } catch (err) {
+      lastError = err;
+    }
   }
 
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages,
-      temperature: 0.1,
-      response_format: { type: "json_object" },
-    }),
-  });
-
-  if (!response.ok) {
-    const errObj = await response.json().catch(() => ({}));
-    throw new Error(errObj.error?.message || `Groq API error: ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  const content = data.choices?.[0]?.message?.content;
-  if (!content) throw new Error("Empty response from Groq API");
-
-  return cleanAndParseJson(content);
+  throw lastError || new Error("Failed to extract with Groq");
 }
 
 /**
@@ -785,8 +806,8 @@ export function parseResumeTextHeuristic(rawText) {
         bullets: [],
       };
     } else if (currentExp) {
-      if (/^[•\-\*]/.test(line)) {
-        currentExp.bullets.push(`• ${line.replace(/^[•\-\*]\s*/, "").trim()}`);
+      if (/^[•\-*]/.test(line)) {
+        currentExp.bullets.push(`• ${line.replace(/^[•\-*]\s*/, "").trim()}`);
       } else if (!currentExp.company || currentExp.company === "Company") {
         currentExp.company = line;
       } else {
@@ -844,7 +865,7 @@ export function parseResumeTextHeuristic(rawText) {
         const techs = line.replace(/.*tech(?:nologies| stack)?:\s*/i, "").split(/[,|]/).map((t) => t.trim()).filter(Boolean);
         currentProj.technologies = techs;
       } else {
-        currentProj.description += (currentProj.description ? " " : "") + line.replace(/^[•\-\*]\s*/, "");
+        currentProj.description += (currentProj.description ? " " : "") + line.replace(/^[•\-*]\s*/, "");
       }
     }
   }
@@ -856,7 +877,7 @@ export function parseResumeTextHeuristic(rawText) {
     if (line.length > 5 && line.length < 80) {
       certifications.push({
         id: `cert_${certifications.length + 1}`,
-        name: line.replace(/^[•\-\*]\s*/, "").trim(),
+        name: line.replace(/^[•\-*]\s*/, "").trim(),
         issuingOrganization: "",
         issueDate: "",
         credentialUrl: "",

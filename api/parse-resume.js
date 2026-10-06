@@ -186,48 +186,65 @@ module.exports = async function handler(req, res) {
     // 2. Call Groq
     if (targetProvider === "groq") {
       const isImage = fileBase64 && (mimeType?.startsWith("image/") || fileBase64.startsWith("data:image"));
-      const model = isImage ? "llama-3.2-11b-vision-preview" : "llama-3.3-70b-versatile";
+      const candidateModels = isImage
+        ? ["qwen/qwen3.8-27b"]
+        : ["qwen/qwen3.8-27b", "openai/gpt-oss-120b", "openai/gpt-oss-20b"];
 
-      let messages = [];
-      if (isImage) {
-        messages = [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: RESUME_SCHEMA_PROMPT },
-              { type: "image_url", image_url: { url: fileBase64 } },
-            ],
-          },
-        ];
-      } else {
-        messages = [
-          { role: "system", content: RESUME_SCHEMA_PROMPT },
-          { role: "user", content: `Resume text:\n\n${rawText || ""}` },
-        ];
+      let lastError = null;
+
+      for (const model of candidateModels) {
+        try {
+          let messages = [];
+          if (isImage) {
+            messages = [
+              {
+                role: "user",
+                content: [
+                  { type: "text", text: RESUME_SCHEMA_PROMPT },
+                  { type: "image_url", image_url: { url: fileBase64 } },
+                ],
+              },
+            ];
+          } else {
+            messages = [
+              { role: "system", content: RESUME_SCHEMA_PROMPT },
+              { role: "user", content: `Resume text:\n\n${rawText || ""}` },
+            ];
+          }
+
+          const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+              model,
+              messages,
+              temperature: 0.1,
+              response_format: { type: "json_object" },
+            }),
+          });
+
+          if (!response.ok) {
+            const errObj = await response.json().catch(() => ({}));
+            const msg = errObj.error?.message || response.statusText;
+            lastError = new Error(`Groq (${model}): ${msg}`);
+            if (response.status === 404 || msg.includes("does not exist")) {
+              continue;
+            }
+            throw lastError;
+          }
+
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content;
+          return res.status(200).json({ success: true, data: cleanAndParseJson(content) });
+        } catch (mErr) {
+          lastError = mErr;
+        }
       }
 
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.1,
-          response_format: { type: "json_object" },
-        }),
-      });
-
-      if (!response.ok) {
-        const errObj = await response.json().catch(() => ({}));
-        throw new Error(errObj.error?.message || `Groq error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
-      return res.status(200).json({ success: true, data: cleanAndParseJson(content) });
+      throw lastError || new Error("All Groq models failed");
     }
 
     // 3. Call Google Gemini
