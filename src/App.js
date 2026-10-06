@@ -6,6 +6,8 @@ import About from "./components/About/About";
 import Projects from "./components/Projects/Projects";
 import Footer from "./components/Footer";
 import Resume from "./components/Resume/ResumeNew";
+import Services from "./components/Services/Services";
+import ResumeScannerPage from "./components/Services/ResumeScannerPage";
 import Chatbot from "./components/Chatbot/Chatbot";
 import VoiceAgent from "./components/VoiceAgent/VoiceAgent";
 import { Batch } from "./components/Batch";
@@ -61,6 +63,9 @@ function App() {
           <Route path="/project" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/resume" element={<Resume />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/resume-scanner" element={<ResumeScannerPage />} />
+          <Route path="/scan" element={<ResumeScannerPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />

@@ -15,6 +15,7 @@ import {
 } from "react-icons/ai";
 
 import { CgFileDocument } from "react-icons/cg";
+import { MdOutlineMiscellaneousServices } from "react-icons/md";
 
 
 function NavBar({ batchVisible }) {
@@ -90,6 +91,19 @@ function NavBar({ batchVisible }) {
                   style={{ marginBottom: "2px" }}
                 />{" "}
                 Projects
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link
+                as={Link}
+                to="/services"
+                onClick={() => updateExpanded(false)}
+              >
+                <MdOutlineMiscellaneousServices
+                  style={{ marginBottom: "2px" }}
+                />{" "}
+                Services
               </Nav.Link>
             </Nav.Item>
 
